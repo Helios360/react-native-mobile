@@ -1,0 +1,80 @@
+import React, { useRef } from 'react';
+import { View, FlatList, Image, Pressable, StyleSheet, Dimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addLikedImage } from '../store/likedImagesSlice';
+
+const screenWidth = Dimensions.get('window').width;
+
+const Card = ({ item }) => {
+  const dispatch = useDispatch();
+  const lastTap = useRef(null);
+
+  const handleDoubleTap = () => {
+    const now = Date.now();
+    if (lastTap.current && (now - lastTap.current) < 300) {
+      // Double tap detected
+      dispatch(addLikedImage(item));
+    }
+    lastTap.current = now;
+  };
+
+  return (
+    <Pressable onPress={handleDoubleTap}>
+      <Image
+        source={{ uri: item.url }}
+        style={styles.image}
+      />
+    </Pressable>
+  );
+};
+
+export default function ListOfCards() {
+  const data = [
+    {
+      itemId: 101,
+      authorId: 11,
+      timeStamp: '2 hrs ago',
+      url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.fp8kNlKj96YBoaDXF_de3QHaEK%3Fr%3D0%26pid%3DApi&f=1&ipt=f7a4b1976bfb4899700a0f296bde1e8617562711df7b758fba9067e302c2ccce&ipo=images',
+      likes: '28',
+      conversations: '12',
+    },
+    {
+      itemId: 102,
+      authorId: 1,
+      timeStamp: '1 week ago',
+      url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.ipm-qsHbljTFWA4ddJKgUwHaFj%3Fr%3D0%26pid%3DApi&f=1&ipt=ff2a5fe85894b502ba11b715692c2877b5e07477ceb1b192513c8c8c293c1b63&ipo=images',
+      likes: '80',
+      conversations: '123',
+    },
+    {
+      itemId: 108,
+      authorId: 6,
+      timeStamp: '5 hrs ago',
+      url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhdwallpaperim.com%2Fwp-content%2Fuploads%2F2017%2F08%2F25%2F455641-space-stars-galaxy-nebula-space_art.jpg&f=1&nofb=1&ipt=a9dbf2cb71641c459fe45b3d7cc4034f353f9bcff7920b3084954988f447a195',
+      likes: '79',
+      conversations: '16',
+    },
+  ];
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={({ item }) => <Card item={item} />}
+      keyExtractor={(item) => item.itemId}
+      numColumns={2}
+      contentContainerStyle={styles.grid}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  image: {
+    width: (screenWidth - 30) / 2,
+    height: 180,
+    borderRadius: 15,
+    margin: 5,
+  },
+  grid: {
+    padding: 10,
+  },
+});
