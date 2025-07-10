@@ -24,7 +24,7 @@ import Feed from './src/surfaces/Feed';
 import Conversations from './src/surfaces/Conversations';
 import AddPost from './src/surfaces/AddPost';
 import Favorites from './src/surfaces/Favorites';
-import Profile from './src/surfaces/Profile';
+import { Profile } from './src/surfaces/Profile';
 import ConversationsNavigation from './src/surfaces/ConversationsNavigation';
 
 const Stack = createStackNavigator();
